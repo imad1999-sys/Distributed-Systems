@@ -19,6 +19,7 @@ public class MessageServiceApplication {
 	@LoadBalanced
 	public static void main(String[] args) {
 		SpringApplication.run(MessageServiceApplication.class, args);
+
 	}
 
 }
