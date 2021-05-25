@@ -1,0 +1,21 @@
+spring:
+application:
+name: send-and-receive-service
+server:
+port: ${PORT:8080}
+
+eureka:
+client:
+serviceUrl:
+defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+endpoints:
+shutdown:
+enabled: true
+sensitive: false
+
+spring.datasource.url: jdbc:postgresql://localhost:5432/SMS
+spring.datasource.username: postgres
+spring.datasource.password: 123456789
+spring.main.allow-bean-definition-overriding: true
+
+
