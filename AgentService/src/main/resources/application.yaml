@@ -1,13 +1,14 @@
+
+spring.datasource.url: jdbc:postgresql://localhost:5432/SMS
+spring.datasource.username: postgres
+spring.datasource.password: 123456
+#spring.datasource.password: 123456789
+spring.main.allow-bean-definition-overriding: true
+
 spring:
   application:
     name: agent-service
-server:
-  port: ${PORT:8081}
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
 management:
   endpoints:
     web:
@@ -16,9 +17,28 @@ management:
   endpoint:
     shutdown:
       enabled: true
-
-spring.datasource.url: jdbc:postgresql://localhost:5432/SMS
-spring.datasource.username: postgres
-spring.datasource.password: 123456
-#spring.datasource.password: 123456789
-spring.main.allow-bean-definition-overriding: true
+---
+# This default profile is used when running a single instance completely standalone:
+spring:
+  profiles: zone1
+server:
+  port: ${PORT:9091}
+eureka:
+  instance:
+    metadataMap:
+      zone: zone1
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8762/eureka/
+---
+spring:
+  profiles: zone2
+server:
+  port: ${PORT:9092}
+eureka:
+  instance:
+    metadataMap:
+      zone: zone2
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8762/eureka/
