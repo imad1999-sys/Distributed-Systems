@@ -1,13 +1,14 @@
 package com.SendAnReceiveMassagesService.SendAnReceiveMassagesService.controllers;
 
+import com.SendAnReceiveMassagesService.SendAnReceiveMassagesService.configuration.MessageConfigration;
 import com.SendAnReceiveMassagesService.SendAnReceiveMassagesService.models.MessageModel;
-import com.SendAnReceiveMassagesService.SendAnReceiveMassagesService.services.SendService;
+import com.SendAnReceiveMassagesService.SendAnReceiveMassagesService.models.MessageStatusModel;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -16,7 +17,9 @@ import java.util.concurrent.TimeoutException;
 @RestController
 public class SendController {
 
-    private SendService sendService;
+
+    @Autowired
+    public RabbitTemplate rabbitTemplate;
 
     @Autowired
     @LoadBalanced
@@ -28,15 +31,19 @@ public class SendController {
         return new RestTemplate();
     }
 
-    @RequestMapping(method = RequestMethod.POST ,  value="/message")
-    public Object sendMessage(MessageModel messageModel) throws IOException, TimeoutException {
-        String searchResult = restTemplate.getForObject("http://search-service/agentName/search/" +messageModel.getNameOfReceiver() , String.class);
+    @RequestMapping(method = RequestMethod.POST , value="/message")
+    @ResponseBody
+    public Object sendMessage(@RequestBody MessageModel messageModel) throws IOException, TimeoutException {
+        String searchResult = restTemplate.getForObject("http://search-service/agentName/search/" +messageModel.getNameOfSender() , String.class);
         System.out.println(searchResult);
-        if(searchResult.equals("true"))
-            return sendService.sendMessage(messageModel.getMessage() , messageModel.getNameOfReceiver());
-
+        if(searchResult.equals("true")) {
+            MessageStatusModel messageStatusModel = new MessageStatusModel(messageModel , "Process");
+            rabbitTemplate.convertAndSend(MessageConfigration.topicExchange , MessageConfigration.routingKey , messageStatusModel);
+            String returningMessage = "Message sent successfully "  + messageModel.getNameOfSender();
+            return returningMessage;
+        }
         else {
-            return "the user not exits";
+            return "The user not exits";
         }
     }
 }
