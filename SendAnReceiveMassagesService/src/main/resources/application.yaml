@@ -1,13 +1,7 @@
 spring:
-application:
-name: send-and-receive-service
-server:
-port: ${PORT:8080}
+  application:
+    name: send-and-receive-service
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
 management:
   endpoints:
     web:
@@ -24,3 +18,28 @@ spring.datasource.password: 123456
 spring.main.allow-bean-definition-overriding: true
 
 
+---
+# This default profile is used when running a single instance completely standalone:
+spring:
+  profiles: zone1
+server:
+  port: ${PORT:7091}
+eureka:
+  instance:
+    metadataMap:
+      zone: zone1
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+---
+spring:
+  profiles: zone2
+server:
+  port: ${PORT:7092}
+eureka:
+  instance:
+    metadataMap:
+      zone: zone2
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

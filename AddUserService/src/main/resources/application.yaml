@@ -7,10 +7,8 @@ spring.main.allow-bean-definition-overriding: true
 
 spring:
   application:
-
     name: add-user-service
-server:
-  port: ${PORT:8084}
+
 
 management:
   endpoints:
@@ -32,7 +30,7 @@ eureka:
       zone: zone1
   client:
     serviceUrl:
-      defaultZone: http://localhost:8762/eureka/
+      defaultZone: http://localhost:8761/eureka/
 ---
 spring:
   profiles: zone2
@@ -44,4 +42,6 @@ eureka:
       zone: zone2
   client:
     serviceUrl:
-      defaultZone: http://localhost:8762/eureka/
+      defaultZone: http://localhost:8761/eureka/
+
+

@@ -9,14 +9,14 @@ zuul:
   prefix: /api
   routes:
     agent:
-      path: /agent/**
-      serviceId: agent-service
+      path: /addUser/**
+      serviceId: add-user-service
     authentication:
-      path: /authentication/**
-      serviceId: authentication-service
+      path: /search/**
+      serviceId: search-service
     message:
       path: /message/**
-      serviceId: message-service
+      serviceId: send-and-receive-service
 
 ribbon:
   eureka:
