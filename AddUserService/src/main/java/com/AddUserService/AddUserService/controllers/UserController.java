@@ -20,10 +20,10 @@ public class UserController {
     private DiscoveryClient discoveryClient;
 
     @Autowired
-//    @LoadBalanced
+    @LoadBalanced
     private RestTemplate restTemplate;
 
-//    @LoadBalanced
+    @LoadBalanced
     @Bean
     public RestTemplate getRestTemplate(){
         return new RestTemplate();
@@ -31,12 +31,10 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.POST ,  value="/user")
     public Object addUser(UserModel userModel) {
-        Boolean user = restTemplate.getForObject("http://search-service/agentName/search/" +userModel.getName() , Boolean.class);
+        String user = restTemplate.getForObject("http://search-service/agentName/search/" +userModel.getName() , String.class);
         System.out.println(user);
-        if(user.equals(true))
+        if(user.equals("true"))
             return "the user is exist";
-        return "the user is not exist";
-
-//        else return userService.addUser(userModel);
+        else return userService.addUser(userModel);
     }
 }

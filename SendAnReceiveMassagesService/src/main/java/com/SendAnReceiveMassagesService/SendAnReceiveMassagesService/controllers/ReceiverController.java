@@ -1,7 +1,10 @@
 package com.SendAnReceiveMassagesService.SendAnReceiveMassagesService.controllers;
 
 
-import com.SendAnReceiveMassagesService.SendAnReceiveMassagesService.services.ReceiveService;
+import com.SendAnReceiveMassagesService.SendAnReceiveMassagesService.configuration.MessageConfigration;
+import com.SendAnReceiveMassagesService.SendAnReceiveMassagesService.models.MessageStatusModel;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-@RestController
+@Component
 public class ReceiverController {
-    private ReceiveService receiveService;
 
-    @RequestMapping(method = RequestMethod.GET ,  value="/receive")
-    public Object receiveMessage(String name) throws IOException, TimeoutException {
-        return receiveService.receive(name);
+    @RabbitListener(queues = MessageConfigration.queueName)
+    public void receieveMessage(MessageStatusModel messageStatusModel){
+        System.out.println("Messages received from queue is: " + messageStatusModel);
     }
 
 }
+

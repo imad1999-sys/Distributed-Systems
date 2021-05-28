@@ -17,3 +17,4 @@ public class SearchController {
         return searchService.searchUserByName(name);
     }
 }
+
