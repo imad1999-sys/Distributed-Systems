@@ -34,13 +34,12 @@ public class SendController {
     @RequestMapping(method = RequestMethod.POST , value="/message")
     @ResponseBody
     public Object sendMessage(@RequestBody MessageModel messageModel) throws IOException, TimeoutException {
-        String searchResult = restTemplate.getForObject("http://search-service/agentName/search/" +messageModel.getNameOfSender() , String.class);
+        String searchResult = restTemplate.getForObject("http://search-service/userName/search/" +messageModel.getNameOfSender() , String.class);
         System.out.println(searchResult);
         if(searchResult.equals("true")) {
             MessageStatusModel messageStatusModel = new MessageStatusModel(messageModel , "Process");
             rabbitTemplate.convertAndSend(MessageConfigration.topicExchange , MessageConfigration.routingKey , messageStatusModel);
-            String returningMessage = "Message sent successfully "  + messageModel.getNameOfSender();
-            return returningMessage;
+            return messageStatusModel;
         }
         else {
             return "The user not exits";

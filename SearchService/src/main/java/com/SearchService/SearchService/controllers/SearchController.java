@@ -12,7 +12,7 @@ public class SearchController {
     @Autowired
     private SearchService searchService;
 
-    @RequestMapping(method = RequestMethod.GET , value = "/agentName/search/{name}")
+    @RequestMapping(method = RequestMethod.GET , value = "/userName/search/{name}")
     public Object searchUserByName(@PathVariable("name") String name) {
         return searchService.searchUserByName(name);
     }
