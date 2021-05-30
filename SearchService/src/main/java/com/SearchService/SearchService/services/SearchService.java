@@ -10,8 +10,9 @@ public class SearchService {
     private SearchRepository searchRepository;
 
     public Object searchUserByName(String name) {
-        if (!searchRepository.findAllUsersByName(name).isEmpty()) {
-            return true;
-        } else return false;
+//        return searchRepository.findAllUsersByName(name);
+       if (!searchRepository.findAllUsersByName(name).isEmpty()) {
+          return true ;
+       } else return false;
     }
 }

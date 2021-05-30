@@ -16,6 +16,6 @@ public class UserService {
         newUser.setName(userModel.getName());
         newUser.setPhone(userModel.getPhone());
         userRepository.save(newUser);
-        return "User has been added successfully";
+        return newUser;
     }
 }

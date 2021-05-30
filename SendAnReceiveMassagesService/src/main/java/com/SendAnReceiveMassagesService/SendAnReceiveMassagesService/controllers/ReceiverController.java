@@ -17,7 +17,7 @@ public class ReceiverController {
 
     @RabbitListener(queues = MessageConfigration.queueName)
     public void receieveMessage(MessageStatusModel messageStatusModel){
-        System.out.println("Messages received from queue is: " + messageStatusModel);
+        System.out.println("Received Messages from queue is: " + messageStatusModel);
     }
 
 }
