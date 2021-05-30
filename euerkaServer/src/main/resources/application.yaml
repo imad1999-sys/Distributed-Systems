@@ -1,9 +1,6 @@
 spring:
   application:
     name: discovery-service
-eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 1
 
 ---
 # This default profile is used when running a single instance completely standalone:
