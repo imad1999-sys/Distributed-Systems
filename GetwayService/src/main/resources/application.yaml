@@ -17,6 +17,9 @@ zuul:
     message:
       path: /message/**
       serviceId: send-and-receive-service
+    del:
+      path: /deleteUser/**
+      serviceId: delete-user-service
 
 ribbon:
   eureka:

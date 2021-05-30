@@ -26,12 +26,12 @@ public class UserController {
 
 
     @RequestMapping(method = RequestMethod.DELETE , value="/delete")
-    public Object deleteCar(@RequestBody UserModel userModel) {
+    public Object deleteUser(@RequestBody UserModel userModel) {
         String user = restTemplate.getForObject("http://search-service/userName/search/" +userModel.getName() , String.class);
         System.out.println(user);
         if(user.equals("true"))
-            return deleteService.deleteCar(userModel);
-            return "the user is not exist";
+            return deleteService.deleteUser(userModel);
+        return "the user is not exist";
 
     }
 }
