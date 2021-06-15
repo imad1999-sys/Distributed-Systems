@@ -13,6 +13,11 @@ spring.main.allow-bean-definition-overriding: true
 spring:
   application:
     name: send-service
+  zipkin:
+    baseUrl: http://localhost:9411/
+  h2:
+    console:
+      enabled: true
 
 management:
   endpoints:
@@ -47,3 +52,13 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          servlet:
+            DispatcherServlet: TRACE
+
+management.endpoints.web.exposure.include: hystrix.stream

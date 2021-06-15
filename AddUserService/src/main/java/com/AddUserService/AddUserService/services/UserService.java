@@ -43,5 +43,15 @@ public class UserService {
         return new TransactionResponse(userModel, newUser.getName(), newUser.getId(), response);
     }
 
+    public Object getFallbackAddUser(UserModel userModel){
+        String response = "";
+        userModel.setId(0);
+        userModel.setPhone(0);
+        userModel.setName("No Name");
+        response = "No user";
+        String res = "fallback response is : " + response + " for id: " + userModel.getId() + " for name: " + userModel.getName() + " for phone: " + userModel.getPhone() + " is slow or down ... ";
+        return res;
+    }
+
 
 }

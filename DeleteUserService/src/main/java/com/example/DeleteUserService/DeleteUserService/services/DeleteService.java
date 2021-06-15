@@ -38,4 +38,9 @@ public class DeleteService {
         }
         return response;
     }
+
+    public Object getFallbackForDeleteUser(String name){
+        String response = "Deleting service for user that name: { " + name + " } is down or too slow";
+        return response;
+    }
 }

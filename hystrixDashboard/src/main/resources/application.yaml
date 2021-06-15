@@ -1,0 +1,2 @@
+server.port: 9195
+management.endpoints.web.exposure.include: hystrix.stream

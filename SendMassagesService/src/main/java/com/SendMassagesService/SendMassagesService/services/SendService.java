@@ -52,4 +52,11 @@ public class SendService {
         }
         return messageModel;
     }
+    public Object getFallbackForSendingMessage(MessageModel messageModel){
+        String fallbackResponse = "";
+        messageModel.setNameOfSender(messageModel.getNameOfSender());
+        messageModel.setMessage("");
+        fallbackResponse = "Sending message service by the sender : " + messageModel.getNameOfSender() +  " is down or too slow";
+        return fallbackResponse;
+    }
 }
