@@ -9,6 +9,8 @@ spring:
   application:
     name: receive-service
 
+spring.zipkin.baseUrl: http://localhost:9411/
+
 management:
   endpoints:
     web:
@@ -30,7 +32,7 @@ eureka:
       zone: zone1
   client:
     serviceUrl:
-      defaultZone: http://172.17.0.2:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
 ---
 spring:
   profiles: zone2
@@ -42,4 +44,4 @@ eureka:
       zone: zone2
   client:
     serviceUrl:
-      defaultZone: http://172.17.0.2:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/

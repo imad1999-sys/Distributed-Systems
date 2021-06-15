@@ -3,6 +3,7 @@ package com.SendMassagesService.SendMassagesService.controllers;
 import com.SendMassagesService.SendMassagesService.configuration.MessageConfigration;
 import com.SendMassagesService.SendMassagesService.models.MessageModel;
 import com.SendMassagesService.SendMassagesService.models.MessageStatusModel;
+import com.SendMassagesService.SendMassagesService.services.SendService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -17,32 +18,12 @@ import java.util.concurrent.TimeoutException;
 @RestController
 public class SendController {
 
-
     @Autowired
-    public RabbitTemplate rabbitTemplate;
-
-//    @Autowired
-//    @LoadBalanced
-//    private RestTemplate restTemplate;
-//
-//    @LoadBalanced
-//    @Bean
-//    public RestTemplate getRestTemplate() {
-//        return new RestTemplate();
-//    }
+    private SendService sendService;
 
     @RequestMapping(method = RequestMethod.POST , value="/message")
     @ResponseBody
     public Object sendMessage(@RequestBody MessageModel messageModel) throws IOException, TimeoutException {
-//        String searchResult = restTemplate.getForObject("http://search-service/userName/search/" +messageModel.getNameOfSender() , String.class);
-//        System.out.println(searchResult);
-//        if(searchResult.equals("true")) {
-            MessageStatusModel messageStatusModel = new MessageStatusModel(messageModel , "Process");
-            rabbitTemplate.convertAndSend(MessageConfigration.topicExchange , MessageConfigration.routingKey , messageStatusModel);
-            return messageStatusModel;
-//        }
-//        else {
-//            return "The user not exits";
-//        }
+        return sendService.sendMessage(messageModel);
     }
 }

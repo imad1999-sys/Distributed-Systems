@@ -2,6 +2,7 @@ package com.example.DeleteUserService.DeleteUserService.controller;
 
 import com.example.DeleteUserService.DeleteUserService.model.UserModel;
 import com.example.DeleteUserService.DeleteUserService.services.DeleteService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -25,13 +26,8 @@ public class UserController {
     }
 
 
-    @RequestMapping(method = RequestMethod.DELETE , value="/delete")
-    public Object deleteUser(@RequestBody UserModel userModel) {
-        String user = restTemplate.getForObject("http://search-service/userName/search/" +userModel.getName() , String.class);
-        System.out.println(user);
-        if(user.equals("true"))
-            return deleteService.deleteUser(userModel);
-        return "the user is not exist";
-
+    @RequestMapping(method = RequestMethod.DELETE , value="/delete/{name}")
+    public Object deleteUser(@PathVariable("name") String name) throws JsonProcessingException {
+            return deleteService.deleteUser(name);
     }
 }
