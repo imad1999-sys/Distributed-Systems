@@ -1,23 +1,22 @@
-## rabbitMQ
-spring.rabbitmq.host: localhost
-spring.rabbitmq.port: 5672
-spring.rabbitmq.username: guest
-spring.rabbitmq.password: guest
-rabbitmq.exchange: direct
+spring:
+  application:
+    name: send-service
+  zipkin:
+    baseUrl: http://localhost:9411/
+    sender:
+      type: web
+    service:
+      name: send-service
+    enabled: true
+  sleuth:
+    enabled: true
+    sampler.probability: 1
 
 spring.datasource.url: jdbc:postgresql://localhost:5432/SMS
 spring.datasource.username: postgres
 spring.datasource.password: 123456789
 spring.main.allow-bean-definition-overriding: true
 
-spring:
-  application:
-    name: send-service
-  zipkin:
-    baseUrl: http://localhost:9411/
-  h2:
-    console:
-      enabled: true
 
 management:
   endpoints:

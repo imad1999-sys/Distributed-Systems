@@ -50,7 +50,7 @@ public class SendService {
         else{
             response = "User { " + messageModel.getNameOfSender() + " } is not Exist";
         }
-        return messageModel;
+        return response;
     }
     public Object getFallbackForSendingMessage(MessageModel messageModel){
         String fallbackResponse = "";

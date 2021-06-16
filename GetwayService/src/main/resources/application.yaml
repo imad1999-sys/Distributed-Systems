@@ -6,7 +6,11 @@ spring:
     sender:
       type: web
     service:
-      name: zipkin-server
+      name: gateway-service
+    enabled: true
+  sleuth:
+    enabled: true
+    sampler.probability: 1
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 1

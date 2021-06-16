@@ -23,6 +23,17 @@ public class SendController {
     @Autowired
     private SendService sendService;
 
+    @Autowired
+    @LoadBalanced
+    private RestTemplate restTemplate;
+
+    @LoadBalanced
+    @Bean
+    public RestTemplate getRestTemplate(){
+        return new RestTemplate();
+    }
+
+
     @RequestMapping(method = RequestMethod.POST , value="/message")
     @HystrixCommand(fallbackMethod = "getFallbackForSendingMessage",
             commandProperties = {
@@ -32,7 +43,7 @@ public class SendController {
                     @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000"),
             })
     @ResponseBody
-    public Object sendMessage(@RequestBody MessageModel messageModel) throws IOException, TimeoutException {
+    public Object sendMessage(@RequestBody MessageModel messageModel) throws IOException{
         return sendService.sendMessage(messageModel);
     }
 
