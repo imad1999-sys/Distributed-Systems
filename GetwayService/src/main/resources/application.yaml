@@ -31,6 +31,9 @@ zuul:
     del:
       path: /deleteUser/**
       serviceId: delete-user-service
+    log:
+      path: /log/**
+      serviceId: log-service
 
 ribbon:
   eureka:

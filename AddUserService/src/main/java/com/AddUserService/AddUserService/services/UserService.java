@@ -40,7 +40,7 @@ public class UserService {
             response = "User is not Exist and the user with name { " + userModel.getName() + " } is Added";
             userRepository.save(newUser);
         }
-        return new TransactionResponse(userModel, newUser.getName(), newUser.getId(), response);
+        return response;
     }
 
     public Object getFallbackAddUser(UserModel userModel){
@@ -53,5 +53,31 @@ public class UserService {
         return res;
     }
 
+    public Object tracingServices(UserModel userModel) throws JsonProcessingException {
+        String response = "";
+        String res = "";
+        logger.info("Add-User Service Request : "+new ObjectMapper().writeValueAsString(userModel));
+        String searchUserResult = template.getForObject("http://search-service/userName/search/" +userModel.getName() , String.class);
+        logger.info("Add-User Service getting Response from Search-Service : "+new ObjectMapper().writeValueAsString(searchUserResult));
+        if(searchUserResult.equals("true")){
+            response = "the search result is: " + searchUserResult;
+            String displayUserInfoResult = template.getForObject("http://log-service/info/" + userModel.getName() , String.class);
+            logger.info("Add-User Service getting Response from Log : "+new ObjectMapper().writeValueAsString(displayUserInfoResult));
+            res = response + "and the user info is: " + displayUserInfoResult;
+            return res;
+        }
+        return res;
+    }
+
+    public Object tracingSecondServices(UserModel userModel) throws JsonProcessingException {
+        String response = "";
+        logger.info("Add-User Service Request: " + new ObjectMapper().writeValueAsString(userModel));
+        String user = template.getForObject("http://search-service/userName/search/info/" +userModel.getName() , String.class);
+        logger.info("Add-User Service getting Response from Search : "+new ObjectMapper().writeValueAsString(user));
+        if(user.equals("true")){
+            response = "the response is: " + user;
+        }
+        return response;
+    }
 
 }

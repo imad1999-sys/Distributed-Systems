@@ -43,4 +43,16 @@ public class UserController {
     public Object getFallbackAddUser(UserModel userModel){
         return userService.getFallbackAddUser(userModel);
     }
+
+    @RequestMapping(method = RequestMethod.POST ,  value="/tracingUser")
+    public Object tracingServices(UserModel userModel) throws JsonProcessingException {
+        return userService.tracingServices(userModel);
+    }
+
+    @RequestMapping(method = RequestMethod.POST ,  value="/tracing")
+    public Object tracingSecondService(UserModel userModel) throws JsonProcessingException {
+        return userService.tracingSecondServices(userModel);
+    }
+
+
 }
