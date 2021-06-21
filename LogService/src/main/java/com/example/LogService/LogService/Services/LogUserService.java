@@ -20,7 +20,7 @@ public class LogUserService {
 
 
     public Object displayUserInfo(String name) throws JsonProcessingException {
-        String response = "the user info is ==>  name: " + name ;
-        return response;
+        logger.info("the user info is: " + new ObjectMapper().writeValueAsString(name));
+        return name;
     }
 }

@@ -5,28 +5,27 @@ import com.AddUserService.AddUserService.services.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    @LoadBalanced
-    private RestTemplate restTemplate;
+    private static Logger log = LoggerFactory.getLogger(UserController.class);
 
-    @LoadBalanced
-    @Bean
-    public RestTemplate getRestTemplate(){
-        return new RestTemplate();
-    }
 
     @RequestMapping(method = RequestMethod.POST ,  value="/user")
     @HystrixCommand(fallbackMethod = "getFallbackAddUser",
@@ -54,5 +53,18 @@ public class UserController {
         return userService.tracingSecondServices(userModel);
     }
 
+    @RequestMapping(method = RequestMethod.POST , value="/test-async-services")
+    public void testAsynch(UserModel userModel) throws InterruptedException, ExecutionException
+    {
+        log.info("testAsynch Start");
 
+        CompletableFuture<String> searchName = userService.getSearchByName(userModel);
+        CompletableFuture<String> userInfo = userService.getUserInfo(userModel);
+
+        // Wait until they are all done
+        CompletableFuture.allOf(searchName, userInfo).join();
+
+        log.info("EmployeeAddress--> " + searchName.get());
+        log.info("EmployeeName--> " + userInfo.get());
+    }
 }
