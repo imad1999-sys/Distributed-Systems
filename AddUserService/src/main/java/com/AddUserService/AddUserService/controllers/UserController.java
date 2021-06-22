@@ -54,17 +54,18 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST , value="/test-async-services")
-    public void testAsynch(UserModel userModel) throws InterruptedException, ExecutionException
+    public Object testParallelDistributedTracing(UserModel userModel) throws InterruptedException, ExecutionException
     {
-        log.info("testAsynch Start");
+        log.info("testParallelDistributedTracing Start");
 
         CompletableFuture<String> searchName = userService.getSearchByName(userModel);
         CompletableFuture<String> userInfo = userService.getUserInfo(userModel);
 
-        // Wait until they are all done
         CompletableFuture.allOf(searchName, userInfo).join();
 
-        log.info("EmployeeAddress--> " + searchName.get());
-        log.info("EmployeeName--> " + userInfo.get());
+        log.info("EmployeeAddress --> " + searchName.get());
+        log.info("EmployeeName --> " + userInfo.get());
+        System.out.println(CompletableFuture.allOf(searchName , userInfo));
+        return CompletableFuture.allOf(searchName , userInfo);
     }
 }

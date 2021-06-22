@@ -11,9 +11,7 @@ spring:
   sleuth:
     enabled: true
     sampler.probability: 1
-eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 1
+
 
 
 zuul:
@@ -35,9 +33,6 @@ zuul:
       path: /log/**
       serviceId: log-service
 
-ribbon:
-  eureka:
-    enabled: true
 ---
 spring:
   profiles: zone1
@@ -45,9 +40,12 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-    #    registerWithEureka:  false
+    registerWithEureka:  true
     preferSameZoneEureka: true
+    preferIpAddress: true
+    fetchRegistry: true
   instance:
+    preferIpAddress: true
     metadataMap:
       zone: zone1
 server:
@@ -60,13 +58,31 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-    #    registerWithEureka:  false
+    registerWithEureka:  true
     preferSameZoneEureka: true
-
+    fetchRegistry: true
   instance:
+    preferIpAddress: true
     metadataMap:
       zone: zone2
 server:
   port: ${PORT:8766}
+
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000
+
+ribbon:
+  read-timeout: 60000
+  connection-timeout: 3000
+  max-auto-retries: 0
+  max-auto-retries-next-server: 1
+  eureka:
+    enabled: true
 
 

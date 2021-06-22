@@ -34,6 +34,7 @@ public class SearchService {
             return false;
         }
     }
+
     public Object searchUserByNameWithLog(String name) throws JsonProcessingException {
         String logResponse = template.getForObject("http://log-service/info/" + name , String.class);
         logger.info("Log-Service Response : {}", new ObjectMapper().writeValueAsString(name));
